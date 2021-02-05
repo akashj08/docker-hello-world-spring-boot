@@ -40,7 +40,7 @@ node {
       // build docker image
       sh "whoami"
       sh "mv ./target/hello*.jar ./data" 
-      sh "docker -t docker push akashj08/sprint-boot-app-ci-cd:${BUILD_NUMBER}  build ."  
+      sh "docker -t akashj08/sprint-boot-app-ci-cd:${BUILD_NUMBER}  build ."  
       
     }
    
