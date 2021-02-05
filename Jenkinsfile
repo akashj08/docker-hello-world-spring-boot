@@ -39,13 +39,11 @@ node {
     stage('Deploy Docker Image'){
       
       // deploy docker image to nexus
-      withCredentials([string(credentialsId: 'DOCKER_PASSWORD', variable: 'DOCKER_PASSWORD')]) {        
       echo "Docker Image Tag Name: akashj08/sprint-boot-app-ci-cd:${BUILD_NUMBER}"
       //sh"echo ${DOCKER_PASSWORD} | docker login -u"akashj08" --password-stdin "
-      docker.withRegistry( '', registryCredential ) { 
-
+      withDockerRegistry([credentialsId: 'DOCKER_PASSWORD', url: 'docker.io/akashj08']) 
+      { 
       sh "docker push akashj08/sprint-boot-app-ci-cd:${BUILD_NUMBER}"
       }
-    }
     }
 }
