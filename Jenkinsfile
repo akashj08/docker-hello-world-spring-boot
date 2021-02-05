@@ -11,12 +11,11 @@ node {
     def dockerImageName = "hello-world-java"
     def dockerImageTag = "${dockerRepoUrl}/${dockerImageName}:${env.BUILD_NUMBER}"
     
-    stage('Clone Repo') { // for display purposes
-      // Get some code from a GitHub repository
-      git 'https://github.com/dstar55/docker-hello-world-spring-boot.git'
-      // Get the Maven tool.
-      // ** NOTE: This 'maven-3.6.1' Maven tool must be configured
-      // **       in the global configuration.           
+    stage('Checkout') {
+            checkout scm
+        }
+
+    stage('Intization') {    
       mvnHome = tool 'maven-3.6.1'
     }    
   
@@ -40,20 +39,17 @@ node {
     stage('Build Docker Image') {
       // build docker image
       sh "whoami"
-      sh "ls -all /var/run/docker.sock"
       sh "mv ./target/hello*.jar ./data" 
+      sh "docker -t docker push akashj08/sprint-boot-app-ci-cd:${BUILD_NUMBER}  build ."  
       
-      dockerImage = docker.build("hello-world-java")
     }
    
     stage('Deploy Docker Image'){
       
       // deploy docker image to nexus
 
-      echo "Docker Image Tag Name: ${dockerImageTag}"
+      echo "Docker Image Tag Name: akashj08/sprint-boot-app-ci-cd:${BUILD_NUMBER}"
 
-      sh "docker login -u admin -p admin123 ${dockerRepoUrl}"
-      sh "docker tag ${dockerImageName} ${dockerImageTag}"
-      sh "docker push ${dockerImageTag}"
+      sh "docker push akashj08/sprint-boot-app-ci-cd:${BUILD_NUMBER}"
     }
 }
