@@ -45,4 +45,12 @@ node {
       sh "docker push akashj08/sprint-boot-app-ci-cd:${BUILD_NUMBER}"
     }
     }
+    stage ('Deploy') {
+            echo "We are going to deploy service"
+            sh "kubectl set image deployment/spring-boot-app spring-boot-app=akashj08/sprint-boot-app-ci-cd:${BUILD_NUMBER} -n test "
+            sh "kubectl rollout status deployment/spring-boot-app -n test "
+        }
+
+
+
 }
